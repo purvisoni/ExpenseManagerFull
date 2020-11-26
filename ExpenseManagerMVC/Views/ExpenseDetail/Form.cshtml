@@ -1,0 +1,27 @@
+@model ExpenseManager.ExpenseDetail;
+<div>
+    New Expense
+</div>
+<p>Please add following infor to add new details in Expense!!</p>
+
+<div>
+    <form asp-action="AddExpense">
+        <label>StoreName</label>
+        <input type="text" asp-for="StoreName"/>
+        <br/>
+        <label>ItemName</label>
+        <input type="text" asp-for="ItemName"/>
+        <br/>
+        <label>Amount</label>
+        <input type="text" asp-for="Amount"/>
+        <br/>
+        <label>ExpenseDate</label>
+        <input type="datetime-local" asp-for="ExpenseDate"/>
+        <br/>
+        <label>Category</label>
+        <input type="text" asp-for="Category"/>
+        <br/>
+
+        <button type="submit"> Create!</button>
+    </form>
+</div>

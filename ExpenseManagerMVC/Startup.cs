@@ -9,6 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using ExpenseManager;
+using static ExpenseManager.ExpenseSystem;
+
 namespace ExpenseManagerMVC
 {
     public class Startup
@@ -24,6 +27,11 @@ namespace ExpenseManagerMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            var expenseStorage = new ExpenseStorageList();
+            var _theExpenseSystem=new ExpenseSystem(expenseStorage);
+
+            services.AddSingleton<ExpenseSystem>(_theExpenseSystem);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
