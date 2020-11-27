@@ -89,10 +89,15 @@ namespace ExpenseManagerMVC.Controllers
                 Category = expense.Category
             };
 
-
             // send the view model
             ViewBag.IsEditing = true;
             return View("Form", expenseViewModel);
+        }
+
+        public IActionResult DeleteExpense(Guid id)
+        {
+            _theExpenseSystem.DeleteEachExpense(id);
+            return RedirectToAction("ViewExpense");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
