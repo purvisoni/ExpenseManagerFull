@@ -42,7 +42,11 @@ namespace ExpenseManager
             return _expenseStorage.ViewExpense();
         }
 
-        public void UpdateEachExpense(Guid id,double amount){
+        public void UpdateEachExpense(ExpenseDetail expenseToUpdate) {
+            _expenseStorage.UpdateExpense(expenseToUpdate);
+        }
+            
+      /*  public void UpdateEachExpense(Guid id){
             //Console.WriteLine($"GUID item id is{id}");
             //Console.WriteLine($"Amount is{amount}");
             var expense = _expenseStorage.GetById(id);
@@ -51,9 +55,9 @@ namespace ExpenseManager
                 throw new Exception($"Item {id} does not exist!!");
             }
            
-            _expenseStorage.UpdateExpense(expense,amount);
+            _expenseStorage.UpdateExpense(expense);
 
-        }
+        }*/
         public void DeleteEachExpense(Guid id){
             var expense = _expenseStorage.GetById(id);
 
@@ -62,7 +66,10 @@ namespace ExpenseManager
             }
 
             _expenseStorage.DeleteExpense(expense);
+        }
 
+        public ExpenseDetail GetExpense(Guid id) {
+            return _expenseStorage.GetById(id);
         }
 
         public void visitedLocation()

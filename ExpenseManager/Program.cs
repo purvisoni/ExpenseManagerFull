@@ -65,7 +65,7 @@ namespace ExpenseManager
                   Console.WriteLine("Enter amount to change:");
                   string userInput2=Console.ReadLine();
                   double amount=Convert.ToDouble(userInput2);
-                 theExpenseSystem.UpdateEachExpense(no,amount);
+                // theExpenseSystem.UpdateEachExpense(no,amount);
                 }
 
                 //Delete specific object of expense

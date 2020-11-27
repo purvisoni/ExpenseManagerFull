@@ -1,0 +1,31 @@
+@model ExpenseManager.ExpenseDetail;
+
+<div>
+    <dl class="row">
+
+        <dt class="col-sm-3">StoreName</dt>
+        <dd class="col-sm-9">@Model.StoreName</dd>
+
+        <dt class="col-sm-3">ItemName</dt>
+        <dd class="col-sm-9">@Model.ItemName</dd>
+
+        <dt class="col-sm-3">Amount</dt>
+        <dd class="col-sm-9">@Model.Amount</dd>
+
+        <dt class="col-sm-3">ExpenseDate</dt>
+        <dd class="col-sm-9">@Model.ExpenseDate</dd>
+
+        <dt class="col-sm-3">Category</dt>
+        <dd class="col-sm-9">@Model.Category</dd>
+
+    </dl>
+    
+    <hr/>
+    <div>
+        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ItemId">Edit Expense</a>
+    </div>
+    <div>
+        <a asp-action="ViewExpense">Back to List</a>
+    </div>
+
+</div>
