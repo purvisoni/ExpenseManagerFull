@@ -77,11 +77,6 @@ namespace ExpenseManager
                   theExpenseSystem.DeleteEachExpense(no);
                 }
 
-                if(userInput=="l")
-                {
-                    theExpenseSystem.visitedLocation();
-                }
-
                 if(userInput=="q")
                 {
                     //to quit

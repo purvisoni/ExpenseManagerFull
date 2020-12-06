@@ -100,6 +100,20 @@ namespace ExpenseManagerMVC.Controllers
             return RedirectToAction("ViewExpense");
         }
 
+        public IActionResult Search() {
+            var search = new SearchViewModel() {
+                StoreName = "",
+                SearchResults = new List<ExpenseDetail>()
+            };
+            return View(search);
+        }
+
+        [HttpPost]
+        public IActionResult Search(SearchViewModel search) {
+            search.SearchResults = _theExpenseSystem.SearchForExpense(search.StoreName);
+            return View(search);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

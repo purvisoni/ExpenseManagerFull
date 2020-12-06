@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
+using F23.StringSimilarity;
 
 namespace ExpenseManager
 {
@@ -39,11 +40,19 @@ namespace ExpenseManager
         public ExpenseDetail GetExpense(Guid id) {
             return _expenseStorage.GetById(id);
         }
+        public List<ExpenseDetail> SearchForExpense(string storeNameToSearch) {
+            List<ExpenseDetail> resultSet = new List<ExpenseDetail>();
+            var l = new Levenshtein();
+            string lowerCaseSearch = storeNameToSearch.ToLower();
+            var expenses = _expenseStorage.ViewExpense();
 
-        public void visitedLocation()
-        {
-            Console.WriteLine("User visited location..");
+            foreach (var expense in expenses) {
+                var lowerCaseTitle = expense.StoreName.ToLower();
+                if (l.Distance(lowerCaseSearch, lowerCaseTitle) < 5) {
+                    resultSet.Add(expense);
+                }
+            }
+            return resultSet;
         }
-
     }
 }
