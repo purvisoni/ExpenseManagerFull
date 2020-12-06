@@ -10,6 +10,7 @@ namespace ExpenseManager
         public double Amount { get; set; }
         public DateTime ExpenseDate { get; set; } = DateTime.Now;
         public string Category { get; set; }
+        
         //Method
         public override string ToString()
         {

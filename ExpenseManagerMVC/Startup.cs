@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using ExpenseManager;
 using static ExpenseManager.ExpenseSystem;
 
+using Microsoft.EntityFrameworkCore;
 namespace ExpenseManagerMVC
 {
     public class Startup
@@ -26,12 +27,17 @@ namespace ExpenseManagerMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = "Host=suleiman.db.elephantsql.com;Port=5432;Database=ihwwgphw;Username=ihwwgphw;Password=Em_9BpT0HFIgTCKbXBmix7otL2UOIFGH;";
+            services.AddDbContext<ApplicationContext> (options => options.UseNpgsql(connectionString, b => b.MigrationsAssembly("ExpenseManagerMVC")));
+            services.AddScoped<IStoreExpense, ExpenseStorageEF>();
+            services.AddScoped<ExpenseSystem>();
+         //   var expenseStorage = new ExpenseStorageEF();
             services.AddControllersWithViews();
 
-            var expenseStorage = new ExpenseStorageList();
+          /*  var ex= penseStorage = new ExpenseStorageList();
             var _theExpenseSystem=new ExpenseSystem(expenseStorage);
 
-            services.AddSingleton<ExpenseSystem>(_theExpenseSystem);
+            services.AddSingleton<ExpenseSystem>(_theExpenseSystem);*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

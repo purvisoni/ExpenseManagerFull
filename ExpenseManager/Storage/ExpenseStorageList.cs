@@ -12,7 +12,6 @@ namespace ExpenseManager{
 
         public void AddExpense(ExpenseDetail expense){
             _expenseList.Add(expense);
-            //Console.WriteLine("Expense has been added sucessfully!!!");
         }
 
         public List<ExpenseDetail> ViewExpense(){
@@ -28,23 +27,12 @@ namespace ExpenseManager{
             expense.Category = expenseToUpdate.Category;
         }
 
-     /*   public void UpdateExpense(ExpenseDetail expense){
-            expense.ItemId = 
-            expense.Amount = amount;
-            Console.WriteLine("Updated amount in expense!!!");
-
-        }*/
-
         public void DeleteExpense(ExpenseDetail expense){
-            
             _expenseList.Remove(expense);
-            //Console.WriteLine("The expense deleted!!!");
-
         }
 
         public ExpenseDetail GetById(Guid id){
             var expense = _expenseList.Find(x => x.ItemId == id);
-
             if (expense == null) {
                 throw new Exception($"Item {id} does not exist in GetById()!!");
             }
