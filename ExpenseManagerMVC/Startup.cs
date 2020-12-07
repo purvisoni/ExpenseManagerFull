@@ -27,7 +27,7 @@ namespace ExpenseManagerMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = "Host=suleiman.db.elephantsql.com;Port=5432;Database=ihwwgphw;Username=ihwwgphw;Password=Em_9BpT0HFIgTCKbXBmix7otL2UOIFGH;";
+            string connectionString = Configuration.GetConnectionString("DefaultDB");
             services.AddDbContext<ApplicationContext> (options => options.UseNpgsql(connectionString, b => b.MigrationsAssembly("ExpenseManagerMVC")));
             services.AddScoped<IStoreExpense, ExpenseStorageEF>();
             services.AddScoped<ExpenseSystem>();
@@ -43,6 +43,11 @@ namespace ExpenseManagerMVC
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope()) {
+                using (var context = serviceScope.ServiceProvider.GetService<ApplicationContext>()) {
+                    context.Database.Migrate();
+                }
+            }
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
