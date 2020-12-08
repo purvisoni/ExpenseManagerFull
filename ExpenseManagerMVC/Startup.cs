@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using ExpenseManager;
 using static ExpenseManager.ExpenseSystem;
 
@@ -27,17 +29,17 @@ namespace ExpenseManagerMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+
             string connectionString = Configuration.GetConnectionString("DefaultDB");
             services.AddDbContext<ApplicationContext> (options => options.UseNpgsql(connectionString, b => b.MigrationsAssembly("ExpenseManagerMVC")));
+        
+        services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddEntityFrameworkStores<ApplicationContext>();
+
             services.AddScoped<IStoreExpense, ExpenseStorageEF>();
             services.AddScoped<ExpenseSystem>();
-         //   var expenseStorage = new ExpenseStorageEF();
-            services.AddControllersWithViews();
-
-          /*  var ex= penseStorage = new ExpenseStorageList();
-            var _theExpenseSystem=new ExpenseSystem(expenseStorage);
-
-            services.AddSingleton<ExpenseSystem>(_theExpenseSystem);*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +65,7 @@ namespace ExpenseManagerMVC
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -70,6 +73,7 @@ namespace ExpenseManagerMVC
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

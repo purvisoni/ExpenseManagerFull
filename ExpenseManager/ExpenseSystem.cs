@@ -20,31 +20,31 @@ namespace ExpenseManager
             _expenseStorage.AddExpense(newExpense);  
         }
 
-        public List<ExpenseDetail> ViewAllExpense(){
-            return _expenseStorage.ViewExpense();
+        public List<ExpenseDetail> ViewAllExpense(Guid userId){
+            return _expenseStorage.ViewExpense(userId);
         }
 
         public void UpdateEachExpense(ExpenseDetail expenseToUpdate) {
             _expenseStorage.UpdateExpense(expenseToUpdate);
         }
             
-        public void DeleteEachExpense(Guid id){
-            var expense = _expenseStorage.GetById(id);
+        public void DeleteEachExpense(Guid id, Guid userId){
+            var expense = _expenseStorage.GetById(id,userId);
 
             if (expense == null) {
                 throw new Exception($"Item {id} does not exist!!");
             }
-            _expenseStorage.DeleteExpense(expense);
+            _expenseStorage.DeleteExpense(expense,userId);
         }
 
-        public ExpenseDetail GetExpense(Guid id) {
-            return _expenseStorage.GetById(id);
+        public ExpenseDetail GetExpense(Guid id, Guid userId) {
+            return _expenseStorage.GetById(id, userId);
         }
-        public List<ExpenseDetail> SearchForExpense(string storeNameToSearch) {
+        public List<ExpenseDetail> SearchForExpense(string storeNameToSearch, Guid userId) {
             List<ExpenseDetail> resultSet = new List<ExpenseDetail>();
             var l = new Levenshtein();
             string lowerCaseSearch = storeNameToSearch.ToLower();
-            var expenses = _expenseStorage.ViewExpense();
+            var expenses = _expenseStorage.ViewExpense(userId);
 
             foreach (var expense in expenses) {
                 var lowerCaseTitle = expense.StoreName.ToLower();

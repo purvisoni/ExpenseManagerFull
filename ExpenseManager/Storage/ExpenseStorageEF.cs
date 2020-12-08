@@ -17,12 +17,12 @@ namespace ExpenseManager{
             _context.SaveChanges();
         }
 
-        public List<ExpenseDetail> ViewExpense(){
+        public List<ExpenseDetail> ViewExpense(Guid userId){
             List<ExpenseDetail> results = new List<ExpenseDetail>();
 
             var expensesFromDb = _context.ExpenseDetails
-                //.AsNoTracking()
-                //.Where(x => x.IsDeleted == false)
+                .AsNoTracking()
+                .Where(x => x.UserId == userId)
                 .ToList();
 
             foreach (var expenseFromDb in expensesFromDb) {
@@ -38,16 +38,19 @@ namespace ExpenseManager{
             _context.SaveChanges();
         }
 
-        public void DeleteExpense(ExpenseDetail expense){
+        public void DeleteExpense(ExpenseDetail expense, Guid userId){
             var expenseDb = ConvertToDb(expense);
+            expenseDb = _context.ExpenseDetails
+            .AsNoTracking()
+            .First(x => x.UserId == userId);
             _context.ExpenseDetails.Remove(expenseDb);
             _context.SaveChanges();
         }
 
-        public ExpenseDetail GetById(Guid id){
+        public ExpenseDetail GetById(Guid id, Guid userId){
             var expenseFromDb = _context.ExpenseDetails
                 .AsNoTracking()
-                //.Where(x => x.IsDeleted == false)
+                .Where(x => x.UserId == userId)
                 .First(x => x.ExpenseDetailEFId == id);
             var expense = ConvertFromDb(expenseFromDb);
             return expense;
@@ -60,7 +63,8 @@ namespace ExpenseManager{
                 ItemName = expenseFromDb.ItemName,
                 Amount = expenseFromDb.Amount,
                 ExpenseDate = expenseFromDb.ExpenseDate,
-                Category = expenseFromDb.Category
+                Category = expenseFromDb.Category,
+                UserId = expenseFromDb.UserId
             };
         }
 
@@ -71,7 +75,8 @@ namespace ExpenseManager{
                 ItemName = expense.ItemName,
                 Amount = expense.Amount,
                 ExpenseDate = expense.ExpenseDate,
-                Category = expense.Category
+                Category = expense.Category,
+                UserId = expense.UserId
             };
         }
     }

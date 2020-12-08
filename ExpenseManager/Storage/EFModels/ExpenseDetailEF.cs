@@ -11,5 +11,6 @@ namespace ExpenseManager
         public DateTime ExpenseDate { get; set; } = DateTime.Now;
         public string Category { get; set; }
         //public bool IsDeleted { get; set; }
+        public Guid UserId { get; set; }
     }
 }

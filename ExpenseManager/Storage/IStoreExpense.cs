@@ -6,9 +6,9 @@ namespace ExpenseManager{
 
         void AddExpense(ExpenseDetail expense);
 
-        List<ExpenseDetail> ViewExpense();
+        List<ExpenseDetail> ViewExpense(Guid userId);
         void UpdateExpense(ExpenseDetail expense);
-        void DeleteExpense(ExpenseDetail expense);
-        ExpenseDetail GetById(Guid id);
+        void DeleteExpense(ExpenseDetail expense, Guid userId);
+        ExpenseDetail GetById(Guid id, Guid userId);
     }
 }

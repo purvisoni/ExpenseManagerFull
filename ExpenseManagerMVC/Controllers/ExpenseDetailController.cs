@@ -7,15 +7,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ExpenseManagerMVC.Models;
 using ExpenseManager;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExpenseManagerMVC.Controllers
 {
+    [Authorize]
     public class ExpenseDetailController : Controller
     {
         private ExpenseSystem _theExpenseSystem;
-        public ExpenseDetailController(ExpenseSystem theExpenseSystem)
+        private UserManager<IdentityUser> _userManager;
+        public ExpenseDetailController(ExpenseSystem theExpenseSystem, UserManager<IdentityUser> userManager)
+    
         {
             _theExpenseSystem=theExpenseSystem;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -29,7 +35,8 @@ namespace ExpenseManagerMVC.Controllers
                     ItemName = expense.ItemName,
                     Amount = expense.Amount,
                     ExpenseDate = expense.ExpenseDate,
-                    Category = expense.Category
+                    Category = expense.Category,
+                    UserId = UserId()
                 };
                 _theExpenseSystem.AddNewExpense(expenseToCreate);
                 return RedirectToAction("ViewExpense");
@@ -41,7 +48,7 @@ namespace ExpenseManagerMVC.Controllers
 
         public IActionResult ViewExpense()
         {
-            List<ExpenseDetail> results = _theExpenseSystem.ViewAllExpense();
+            List<ExpenseDetail> results = _theExpenseSystem.ViewAllExpense(UserId());
             return View(results);
         }
 
@@ -54,7 +61,8 @@ namespace ExpenseManagerMVC.Controllers
                     ItemName = updatedExpense.ItemName,
                     Amount = updatedExpense.Amount,
                     ExpenseDate = updatedExpense.ExpenseDate,
-                    Category = updatedExpense.Category
+                    Category = updatedExpense.Category,
+                    UserId = UserId()
                 };
                 _theExpenseSystem.UpdateEachExpense(expense);
                 return RedirectToAction("ViewExpense");
@@ -71,13 +79,13 @@ namespace ExpenseManagerMVC.Controllers
         }
 
         public IActionResult Details(Guid id) {
-            var expense = _theExpenseSystem.GetExpense(id);
+            var expense = _theExpenseSystem.GetExpense(id, UserId());
             return View(expense);
         }
 
         public IActionResult Edit(Guid id) {
             // Get the Expense from the ExpenseSystem
-            var expense = _theExpenseSystem.GetExpense(id);
+            var expense = _theExpenseSystem.GetExpense(id, UserId());
 
             // build the view model
             var expenseViewModel = new ExpenseDetailViewModel() {
@@ -87,6 +95,7 @@ namespace ExpenseManagerMVC.Controllers
                 Amount = expense.Amount,
                 ExpenseDate = expense.ExpenseDate,
                 Category = expense.Category
+                //UserId = UserId()
             };
 
             // send the view model
@@ -96,7 +105,7 @@ namespace ExpenseManagerMVC.Controllers
 
         public IActionResult DeleteExpense(Guid id)
         {
-            _theExpenseSystem.DeleteEachExpense(id);
+            _theExpenseSystem.DeleteEachExpense(id, UserId());
             return RedirectToAction("ViewExpense");
         }
 
@@ -110,7 +119,7 @@ namespace ExpenseManagerMVC.Controllers
 
         [HttpPost]
         public IActionResult Search(SearchViewModel search) {
-            search.SearchResults = _theExpenseSystem.SearchForExpense(search.StoreName);
+            search.SearchResults = _theExpenseSystem.SearchForExpense(search.StoreName, UserId());
             return View(search);
         }
 
@@ -118,6 +127,11 @@ namespace ExpenseManagerMVC.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private Guid UserId() {
+            string stringUserId = _userManager.GetUserId(User);
+            return Guid.Parse(stringUserId);
         }
     }
 }

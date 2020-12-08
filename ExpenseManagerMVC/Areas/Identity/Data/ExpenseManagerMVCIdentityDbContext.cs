@@ -1,13 +1,19 @@
-using Microsoft.EntityFrameworkCore;
+/*
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-namespace ExpenseManager{
-
-    public class ApplicationContext : IdentityDbContext<IdentityUser> {
-
-        public ApplicationContext (DbContextOptions<ApplicationContext> options) : base(options){
-            //empty constructor
+namespace ExpenseManagerMVC.Areas.Identity.Data
+{
+    public class ExpenseManagerMVCIdentityDbContext : IdentityDbContext<IdentityUser>
+    {
+        public ExpenseManagerMVCIdentityDbContext(DbContextOptions<ExpenseManagerMVCIdentityDbContext> options)
+            : base(options)
+        {
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -17,7 +23,6 @@ namespace ExpenseManager{
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
-        
-        public DbSet<ExpenseDetailEF> ExpenseDetails { get; set;} 
     }
 }
+*/
